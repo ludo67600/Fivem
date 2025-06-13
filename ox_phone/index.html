@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Téléphone FiveM</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="phone-container">
+        <div id="phone-frame">
+            <!-- Barre d'état -->
+            <div id="status-bar">
+                <div class="status-left">
+                    <span id="current-time">00:00</span>
+                </div>
+                <div class="status-right">
+                    <i class="fas fa-signal"></i>
+                    <i class="fas fa-battery-full"></i>
+                </div>
+            </div>
+            
+<!-- Écran de verrouillage -->
+<div id="lock-screen" class="screen active">
+    <div id="lock-date"></div>
+    <div id="lock-time">00:00</div>
+    <div id="fingerprint-container">
+        <button id="fingerprint-btn">
+            <i class="fas fa-fingerprint"></i>
+        </button>
+        <div id="fingerprint-text">Appuyez pour déverrouiller</div>
+    </div>
+</div>
+
+<!-- Écran d'accueil -->
+<div id="home-screen" class="screen">
+    <div id="home-date"></div>
+    <div id="app-grid"></div>
+</div>
+            
+            <!-- Écran de l'application Contacts -->
+            <div id="contacts-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Contacts</h1>
+                    <button class="action-btn" id="add-contact-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Rechercher un contact" id="contact-search">
+                    </div>
+                    <div id="contacts-list"></div>
+                </div>
+            </div>
+            
+            <!-- Écran du formulaire d'ajout/modification de contact -->
+            <div id="contact-form-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1 id="contact-form-title">Nouveau contact</h1>
+                    <button class="action-btn" id="save-contact-btn"><i class="fas fa-save"></i></button>
+                </div>
+                <div class="app-content">
+                    <form id="contact-form">
+                        <input type="hidden" id="contact-id">
+                        <div class="form-group">
+                            <label for="contact-name">Nom</label>
+                            <input type="text" id="contact-name" placeholder="Nom du contact" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-number">Numéro</label>
+                            <input type="text" id="contact-number" placeholder="Numéro de téléphone" required>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Écran de l'application Messages -->
+            <div id="messages-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Messages</h1>
+                    <button class="action-btn" id="new-message-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="search-bar">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Rechercher un message" id="message-search">
+                    </div>
+                    <div id="conversations-list"></div>
+                </div>
+            </div>
+            
+            <!-- Écran de conversation -->
+            <div id="conversation-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1 id="conversation-title">Conversation</h1>
+                    <button class="action-btn" id="call-from-message-btn"><i class="fas fa-phone"></i></button>
+                </div>
+                <div class="app-content">
+                    <div id="messages-list"></div>
+                    <div class="message-input">
+                        <input type="text" id="new-message-input" placeholder="Écrire un message...">
+                        <button id="send-message-btn"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de nouveau message -->
+            <div id="new-message-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Nouveau message</h1>
+                    <button class="action-btn disabled" id="continue-message-btn"><i class="fas fa-arrow-right"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="form-group">
+                        <label for="message-recipient">À:</label>
+                        <input type="text" id="message-recipient" placeholder="Numéro ou nom">
+                    </div>
+                    <div id="contacts-suggestions"></div>
+                </div>
+            </div>
+            
+            <!-- Écran de l'application Téléphone -->
+            <div id="phone-app-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Téléphone</h1>
+                    <button class="action-btn" id="call-history-btn"><i class="fas fa-history"></i></button>
+                </div>
+                <div class="app-content">
+                    <div id="dialer-display">
+                        <input type="text" id="dialed-number" readonly>
+                    </div>
+                    <div id="dialer-pad">
+                        <button class="dialer-key" data-key="1">1</button>
+                        <button class="dialer-key" data-key="2">2<span>ABC</span></button>
+                        <button class="dialer-key" data-key="3">3<span>DEF</span></button>
+                        <button class="dialer-key" data-key="4">4<span>GHI</span></button>
+                        <button class="dialer-key" data-key="5">5<span>JKL</span></button>
+                        <button class="dialer-key" data-key="6">6<span>MNO</span></button>
+                        <button class="dialer-key" data-key="7">7<span>PQRS</span></button>
+                        <button class="dialer-key" data-key="8">8<span>TUV</span></button>
+                        <button class="dialer-key" data-key="9">9<span>WXYZ</span></button>
+                        <button class="dialer-key" data-key="*">*</button>
+                        <button class="dialer-key" data-key="0">0</button>
+                        <button class="dialer-key" data-key="#">#</button>
+                    </div>
+                    <div id="call-controls">
+                        <button id="start-call-btn" class="call-btn"><i class="fas fa-phone"></i></button>
+                        <button id="delete-digit-btn"><i class="fas fa-backspace"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran d'historique des appels -->
+            <div id="call-history-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Historique</h1>
+                </div>
+                <div class="app-content">
+                    <div id="call-history-list"></div>
+                </div>
+            </div>
+            
+            <!-- Écran d'appel -->
+            <div id="calling-screen" class="screen">
+                <div class="app-header">
+                    <h1 id="call-status">Appel en cours...</h1>
+                </div>
+                <div class="app-content calling-content">
+                    <div id="caller-info">
+                        <div id="caller-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <h2 id="caller-name">Inconnu</h2>
+                        <p id="caller-number">Numéro inconnu</p>
+                    </div>
+                    <div id="call-duration">00:00</div>
+                    <div id="calling-controls">
+                        <button id="end-call-btn" class="call-btn end"><i class="fas fa-phone-slash"></i></button>
+                        <button id="answer-call-btn" class="call-btn answer hidden"><i class="fas fa-phone"></i></button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de l'application Twitter -->
+            <div id="twitter-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Twitter</h1>
+                    <button class="action-btn" id="new-tweet-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="app-content">
+                    <div id="tweets-list"></div>
+                </div>
+            </div>
+            
+            <!-- Écran de nouveau tweet -->
+            <div id="new-tweet-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Nouveau tweet</h1>
+                    <button class="action-btn" id="send-tweet-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="form-group">
+                        <textarea id="tweet-content" placeholder="Quoi de neuf ?" maxlength="280"></textarea>
+                        <div id="tweet-char-count">0/280</div>
+                    </div>
+                    <div class="form-group">
+                        <button id="tweet-add-photo" class="btn-secondary"><i class="fas fa-camera"></i> Ajouter une photo</button>
+                        <div id="tweet-photo-preview" class="hidden">
+                            <img id="tweet-photo" src="" alt="Photo">
+                            <button id="tweet-remove-photo"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de l'application Annonces -->
+            <div id="ads-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Annonces</h1>
+                    <button class="action-btn" id="new-ad-btn"><i class="fas fa-plus"></i></button>
+                </div>
+                <div class="app-content">
+                    <div id="ads-list"></div>
+                </div>
+            </div>
+            
+            <!-- Écran de nouvelle annonce -->
+            <div id="new-ad-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Nouvelle annonce</h1>
+                    <button class="action-btn" id="send-ad-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="form-group">
+                        <label for="ad-title">Titre</label>
+                        <input type="text" id="ad-title" placeholder="Titre de l'annonce" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="ad-content">Description</label>
+                        <textarea id="ad-content" placeholder="Description détaillée" maxlength="500"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="ad-price">Prix (facultatif)</label>
+                        <input type="number" id="ad-price" placeholder="Prix" min="0">
+                    </div>
+                    <div class="form-group">
+                        <button id="ad-add-photo" class="btn-secondary"><i class="fas fa-camera"></i> Ajouter une photo</button>
+                        <div id="ad-photo-preview" class="hidden">
+                            <img id="ad-photo" src="" alt="Photo">
+                            <button id="ad-remove-photo"><i class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de l'application Banque -->
+            <div id="bank-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Banque</h1>
+                    <button class="action-btn" id="new-transfer-btn"><i class="fas fa-exchange-alt"></i></button>
+                </div>
+                <div class="app-content">
+                    <div id="bank-balance">
+                        <h2>Solde</h2>
+                        <p id="balance-amount">$0</p>
+                    </div>
+                    <div id="bank-transactions">
+                        <h3>Dernières transactions</h3>
+                        <div id="transactions-list"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de transfert bancaire -->
+            <div id="transfer-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Transfert</h1>
+                    <button class="action-btn" id="send-transfer-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="form-group">
+                        <label for="transfer-recipient">Destinataire</label>
+                        <input type="text" id="transfer-recipient" placeholder="Numéro de téléphone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transfer-amount">Montant</label>
+                        <input type="number" id="transfer-amount" placeholder="Montant" min="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="transfer-reason">Motif (facultatif)</label>
+                        <input type="text" id="transfer-reason" placeholder="Motif du transfert">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de l'application Appareil photo -->
+            <div id="camera-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Appareil photo</h1>
+                </div>
+                <div class="app-content">
+                    <div id="camera-options">
+                        <button id="take-photo-btn" class="btn-primary"><i class="fas fa-camera"></i> Prendre une photo</button>
+                        <button id="take-selfie-btn" class="btn-secondary"><i class="fas fa-user"></i> Prendre un selfie</button>
+                        <button id="view-gallery-btn" class="btn-secondary"><i class="fas fa-images"></i> Galerie</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de la galerie photos -->
+            <div id="gallery-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Galerie</h1>
+                </div>
+                <div class="app-content">
+                    <div id="gallery-grid"></div>
+                </div>
+            </div>
+            
+            <!-- Écran de visualisation photo -->
+            <div id="photo-view-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Photo</h1>
+                    <button class="action-btn" id="photo-options-btn"><i class="fas fa-ellipsis-v"></i></button>
+                </div>
+                <div class="app-content">
+                    <div id="photo-container">
+                        <img id="full-photo" src="" alt="Photo">
+                    </div>
+                    <div id="photo-options" class="hidden">
+                        <button id="share-photo-btn" class="btn-secondary"><i class="fas fa-share"></i> Partager</button>
+                        <button id="delete-photo-btn" class="btn-danger"><i class="fas fa-trash"></i> Supprimer</button>
+                    </div>
+                </div>
+            </div>
+			
+			            <!-- Écran de l'application YouTube -->
+            <div id="youtube-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>YouTube</h1>
+                    <button class="action-btn" id="youtube-search-btn"><i class="fas fa-search"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="youtube-sections">
+                        <div class="youtube-section">
+                            <div class="youtube-section-header">
+                                <h3>Historique</h3>
+                                <button id="clear-youtube-history-btn" class="btn-text"><i class="fas fa-trash"></i></button>
+                            </div>
+                            <div id="youtube-history-list" class="youtube-video-list"></div>
+                        </div>
+                        <div class="youtube-section">
+                            <h3>Tendances</h3>
+                            <div id="youtube-trending-list" class="youtube-video-list"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Écran de recherche YouTube -->
+            <div id="youtube-search-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Recherche</h1>
+                </div>
+                <div class="app-content">
+                    <div class="search-bar youtube-search-bar">
+                        <input type="text" id="youtube-search-input" placeholder="Rechercher sur YouTube...">
+                        <button id="execute-search-btn"><i class="fas fa-search"></i></button>
+                    </div>
+                    <div id="youtube-search-results" class="youtube-video-list"></div>
+                </div>
+            </div>
+            
+            <!-- Écran de visionnage de vidéo YouTube -->
+            <div id="youtube-video-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Visionnage</h1>
+                    <button class="action-btn" id="share-youtube-video-btn"><i class="fas fa-share"></i></button>
+                </div>
+                <div class="app-content">
+                    <div class="youtube-video-container">
+                        <iframe id="youtube-video-player" src="" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <div class="youtube-video-details">
+    <button id="youtube-stop-video-btn" class="youtube-stop-btn"><i class="fas fa-stop"></i> Arrêter</button>
+    <div id="youtube-video-title" class="youtube-video-title"></div>
+    <div class="youtube-video-stats">
+                            <div id="youtube-video-channel" class="youtube-video-channel"></div>
+                            <div class="youtube-video-metadata">
+                                <span id="youtube-video-views"></span> • <span id="youtube-video-likes"></span>
+                                <button id="like-youtube-video-btn" class="youtube-like-btn"><i class="fas fa-thumbs-up"></i></button>
+                            </div>
+                        </div>
+                        <div id="youtube-video-description" class="youtube-video-description"></div>
+                    </div>
+                </div>
+            </div>
+			
+			<!-- Écran de l'application Garage -->
+<div id="garage-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1>Mes Véhicules</h1>
+        <button class="action-btn" id="refresh-vehicles-btn"><i class="fas fa-sync-alt"></i></button>
+    </div>
+    <div class="app-content">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher un véhicule" id="vehicle-search">
+        </div>
+        <div id="vehicles-list"></div>
+    </div>
+</div>
+
+
+
+<!-- Écran de détails du véhicule -->
+<div id="vehicle-details-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1 id="vehicle-detail-title">Détails du véhicule</h1>
+    </div>
+    <div class="app-content">
+        <div id="vehicle-info-container">
+            <div id="vehicle-image" class="vehicle-image">
+                <i class="fas fa-car"></i>
+            </div>
+            <div id="vehicle-info">
+                <!-- Les détails du véhicule seront remplis dynamiquement -->
+            </div>
+            <div id="vehicle-actions">
+                <button id="locate-vehicle-btn" class="btn-primary"><i class="fas fa-map-marker-alt"></i> Localiser</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Écran de l'application Alarme -->
+<div id="alarm-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1>Alarmes</h1>
+        <button class="action-btn" id="add-alarm-btn"><i class="fas fa-plus"></i></button>
+    </div>
+    <div class="app-content">
+        <div id="alarms-list"></div>
+        <div id="empty-alarms" class="empty-list hidden">Aucune alarme</div>
+    </div>
+</div>
+
+<!-- Écran d'ajout/modification d'alarme -->
+<div id="alarm-form-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1 id="alarm-form-title">Nouvelle alarme</h1>
+        <button class="action-btn" id="save-alarm-btn"><i class="fas fa-save"></i></button>
+    </div>
+    <div class="app-content">
+        <form id="alarm-form">
+            <input type="hidden" id="alarm-id">
+            <div class="form-group">
+                <label for="alarm-label">Libellé</label>
+                <input type="text" id="alarm-label" placeholder="Mon alarme" required>
+            </div>
+            <div class="form-group">
+                <label for="alarm-time">Heure</label>
+                <input type="time" id="alarm-time" required>
+            </div>
+            <div class="form-group">
+                <label>Jours</label>
+                <div class="days-selector">
+                    <div class="day-item" data-day="Monday">
+                        <span>Lun</span>
+                        <div class="day-checkbox"></div>
+                    </div>
+                    <div class="day-item" data-day="Tuesday">
+                        <span>Mar</span>
+                        <div class="day-checkbox"></div>
+                    </div>
+                    <div class="day-item" data-day="Wednesday">
+                        <span>Mer</span>
+                        <div class="day-checkbox"></div>
+                    </div>
+                    <div class="day-item" data-day="Thursday">
+                        <span>Jeu</span>
+                        <div class="day-checkbox"></div>
+                    </div>
+                    <div class="day-item" data-day="Friday">
+                        <span>Ven</span>
+                        <div class="day-checkbox"></div>
+                    </div>
+                    <div class="day-item" data-day="Saturday">
+                        <span>Sam</span>
+                        <div class="day-checkbox"></div>
+                    </div>
+                    <div class="day-item" data-day="Sunday">
+                        <span>Dim</span>
+                        <div class="day-checkbox"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="alarm-sound">Sonnerie</label>
+                <select id="alarm-sound">
+                    <option value="alarm1">Alarme 1</option>
+                    <option value="alarm2">Alarme 2</option>
+                    <option value="alarm3">Alarme 3</option>
+                    <option value="ringtone1">Sonnerie 1</option>
+                    <option value="ringtone2">Sonnerie 2</option>
+                </select>
+                <button type="button" id="test-alarm-sound" class="btn-secondary"><i class="fas fa-play"></i> Tester</button>
+            </div>
+            <div class="form-group">
+                <label for="alarm-repeat">Répéter chaque semaine</label>
+                <label class="switch">
+                    <input type="checkbox" id="alarm-repeat" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="form-group">
+                <label for="alarm-enabled">Activer</label>
+                <label class="switch">
+                    <input type="checkbox" id="alarm-enabled" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Popup de notification d'alarme -->
+<div id="alarm-notification" class="popup-notification hidden">
+    <div class="popup-header">
+        <h2>Alarme</h2>
+        <button id="close-alarm-notification"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="popup-content">
+        <div class="alarm-info">
+            <div class="alarm-time" id="alarm-notification-time">07:30</div>
+            <div class="alarm-label" id="alarm-notification-label">Réveil</div>
+        </div>
+        <div class="alarm-actions">
+            <button id="dismiss-alarm" class="btn-primary">Arrêter</button>
+            <button id="snooze-alarm" class="btn-secondary">Répéter (5 min)</button>
+        </div>
+    </div>
+</div>
+
+<!-- Écran du Centre d'appel -->
+<div id="emergency-center-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1>Centre d'appel</h1>
+    </div>
+    <div class="app-content">
+        <div class="search-bar">
+            <i class="fas fa-search"></i>
+            <input type="text" placeholder="Rechercher un service" id="service-search">
+        </div>
+        <div id="emergency-services-list"></div>
+    </div>
+</div>
+
+<!-- Écran de l'application Agent -->
+<div id="agent-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1>Agent</h1>
+    </div>
+    <div class="app-content">
+        <div id="agent-status-info">
+            <!-- Les informations de statut seront injectées ici -->
+        </div>
+        <div id="agent-action-buttons">
+            <!-- Les boutons d'action seront injectés ici -->
+        </div>
+    </div>
+</div>
+
+
+
+            
+            <!-- Écran de l'application Paramètres -->
+            <div id="settings-screen" class="screen">
+                <div class="app-header">
+                    <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+                    <h1>Paramètres</h1>
+                </div>
+                <div class="app-content">
+                    <div class="settings-group">
+                        <h3>Personnalisation</h3>
+                        <div class="setting-item">
+                            <span>Fond d'écran</span>
+                            <button id="change-wallpaper-btn" class="btn-secondary">Changer</button>
+                        </div>
+                        <div class="setting-item">
+                            <span>Sonnerie</span>
+                            <button id="change-ringtone-btn" class="btn-secondary">Changer</button>
+                        </div>
+                        <div class="setting-item">
+                            <span>Son de notification</span>
+                            <button id="change-notification-btn" class="btn-secondary">Changer</button>
+                        </div>
+                        <div class="setting-item">
+                            <span>Thème</span>
+                            <select id="theme-select">
+                                <option value="default">Par défaut</option>
+                                <option value="dark">Sombre</option>
+                                <option value="light">Clair</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>Notifications</h3>
+                        <div class="setting-item">
+                            <span>Mode silencieux</span>
+                            <label class="switch">
+                                <input type="checkbox" id="dnd-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>Réseau</h3>
+                        <div class="setting-item">
+                            <span>Mode avion</span>
+                            <label class="switch">
+                                <input type="checkbox" id="airplane-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <h3>À propos</h3>
+                        <div class="setting-item">
+                            <span>Numéro de téléphone</span>
+                            <span id="phone-number">Inconnu</span>
+                        </div>
+                        <div class="setting-item">
+                            <span>Version</span>
+                            <span>1.0.0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+<!-- Écran de sélection de fond d'écran -->
+<div id="wallpaper-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1>Fond d'écran</h1>
+    </div>
+    <div class="app-content">
+        <div id="wallpapers-grid" class="grid">
+            <div class="wallpaper-item" data-wallpaper="background1">
+                <img src="images/wallpapers/background1.jpg" alt="Fond 1">
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="wallpaper-item" data-wallpaper="background2">
+                <img src="images/wallpapers/background2.jpg" alt="Fond 2">
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="wallpaper-item" data-wallpaper="background3">
+                <img src="images/wallpapers/background3.jpg" alt="Fond 3">
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="wallpaper-item" data-wallpaper="background4">
+                <img src="images/wallpapers/background4.jpg" alt="Fond 4">
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="wallpaper-item" data-wallpaper="background5">
+                <img src="images/wallpapers/background5.jpg" alt="Fond 5">
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="wallpaper-item" data-wallpaper="background6">
+                <img src="images/wallpapers/background6.jpg" alt="Fond 6">
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Écran de sélection de sonnerie -->
+<div id="ringtone-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1>Sonnerie</h1>
+    </div>
+    <div class="app-content">
+        <div class="list">
+            <div class="list-item ringtone-item" data-ringtone="ringtone1">
+                <span>Sonnerie 1</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="list-item ringtone-item" data-ringtone="ringtone2">
+                <span>Sonnerie 2</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="list-item ringtone-item" data-ringtone="ringtone3">
+                <span>Sonnerie 3</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="list-item ringtone-item" data-ringtone="ringtone4">
+                <span>Sonnerie 4</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Écran de sélection de son de notification -->
+<div id="notification-sound-screen" class="screen">
+    <div class="app-header">
+        <button class="back-btn"><i class="fas fa-chevron-left"></i></button>
+        <h1>Notifications</h1>
+    </div>
+    <div class="app-content">
+        <div class="list">
+            <div class="list-item notification-item" data-notification="notification1">
+                <span>Notification 1</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="list-item notification-item" data-notification="notification2">
+                <span>Notification 2</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="list-item notification-item" data-notification="notification3">
+                <span>Notification 3</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+            <div class="list-item notification-item" data-notification="notification4">
+                <span>Notification 4</span>
+                <button class="play-btn"><i class="fas fa-play"></i></button>
+                <!-- La classe 'selected' sera ajoutée dynamiquement par JavaScript -->
+            </div>
+        </div>
+    </div>
+</div>
+            
+            <!-- Barre de navigation -->
+            <div id="nav-bar">
+                <button id="back-btn"><i class="fas fa-chevron-left"></i></button>
+                <button id="home-btn"><i class="fas fa-home"></i></button>
+                <button id="lock-btn"><i class="fas fa-lock"></i></button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts JavaScript -->
+    <script src="app.js"></script>
+</body>
+</html>

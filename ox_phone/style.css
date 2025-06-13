@@ -1,0 +1,2600 @@
+/* web/dist/style.css */
+:root {
+    /* Couleurs de base */
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    
+    /* Couleurs spécifiques */
+    --text-color: #333;
+    --background-color: #fff;
+    --border-color: #ddd;
+    --item-hover-color: #f5f5f5;
+    --status-bar-bg: rgba(0, 0, 0, 0.8);
+    --nav-bar-bg: rgba(0, 0, 0, 0.8);
+    
+    /* Couleurs de messages */
+    --message-outgoing-bg: #0084ff;
+    --message-incoming-bg: #f1f0f0;
+    --message-outgoing-text: #fff;
+    --message-incoming-text: #333;
+    
+    /* Couleurs d'appels */
+    --call-outgoing-color: #0084ff;
+    --call-incoming-color: #28a745;
+    --call-missed-color: #dc3545;
+    --call-rejected-color: #ff9800;
+}
+
+/* Thème sombre */
+[data-theme="dark"] {
+    --text-color: #f8f9fa;
+    --background-color: #121212;
+    --border-color: #2a2a2a;
+    --item-hover-color: #1a1a1a;
+    --status-bar-bg: rgba(0, 0, 0, 0.9);
+    --nav-bar-bg: rgba(0, 0, 0, 0.9);
+    
+    /* Couleurs de messages en thème sombre */
+    --message-outgoing-bg: #0084ff;
+    --message-incoming-bg: #2a2a2a;
+    --message-outgoing-text: #fff;
+    --message-incoming-text: #f8f9fa;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: transparent;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#phone-container {
+    display: none; /* Caché par défaut, visible via JavaScript */
+    position: absolute;
+    bottom: 10%;
+    right: 5%;
+    width: 350px;
+    height: 700px;
+    overflow: hidden;
+}
+
+#phone-frame {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: var(--background-color);
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Barre d'état */
+#status-bar {
+    height: 30px;
+    background-color: var(--status-bar-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+    color: white;
+    z-index: 20;
+}
+
+.status-left, .status-right {
+    display: flex;
+    align-items: center;
+}
+
+.status-right i {
+    margin-left: 8px;
+}
+
+/* Écrans */
+.screen {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 30px; /* Hauteur de la barre d'état */
+    left: 0;
+    right: 0;
+    bottom: 50px; /* Hauteur de la barre de navigation */
+    overflow: hidden;
+    background-color: var(--background-color);
+    color: var(--text-color);
+	z-index: 10;
+}
+
+.screen.active {
+    display: flex;
+}
+
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    height: 50px;
+}
+
+.app-header h1 {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.app-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.app-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+/* Écran d'accueil */
+#home-screen {
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+#home-screen.active {
+    display: flex;
+}
+
+
+#home-date {
+    text-align: center;
+    padding: 10px;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    margin-top: 20px;
+}
+
+#app-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+    padding: 20px;
+    margin-top: auto;
+    margin-bottom: 20px;
+}
+
+.app-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+}
+
+.app-icon span {
+    font-size: 12px;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Style pour les images d'icônes d'applications */
+.app-icon img {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    object-fit: contain;
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 5px;
+}
+
+/* Barre de navigation */
+#nav-bar {
+    height: 50px;
+    background-color: var(--nav-bar-bg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute; /* Position absolue pour garantir le placement */
+    bottom: 0; /* Fixé au bas de l'écran */
+    left: 0;
+    right: 0;
+    z-index: 20;
+    padding: 0 30px;
+}
+
+/* Listes */
+.search-bar {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    background-color: var(--item-hover-color);
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.search-bar i {
+    margin-right: 8px;
+    color: var(--secondary-color);
+}
+
+.search-bar input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-color);
+}
+
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.list-item:last-child {
+    border-bottom: none;
+}
+
+.list-item:hover, .list-item:active {
+    background-color: var(--item-hover-color);
+}
+
+.empty-list {
+    text-align: center;
+    padding: 20px;
+    color: var(--secondary-color);
+    font-style: italic;
+}
+
+/* Contacts */
+.contact-item {
+    display: flex;
+    align-items: center;
+}
+
+.contact-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+}
+
+.contact-info {
+    flex: 1;
+}
+
+.contact-name {
+    font-weight: 500;
+}
+
+.contact-number {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.contact-actions {
+    display: flex;
+}
+
+.contact-actions button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    margin-left: 10px;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+/* Messages */
+.conversation-item {
+    display: flex;
+    align-items: center;
+}
+
+.conversation-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+    position: relative;
+}
+
+.unread-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: var(--danger-color);
+    color: white;
+    font-size: 10px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.conversation-info {
+    flex: 1;
+}
+
+.conversation-name {
+    font-weight: 500;
+    display: flex;
+    justify-content: space-between;
+}
+
+.conversation-time {
+    font-size: 11px;
+    color: var(--secondary-color);
+}
+
+.conversation-preview {
+    font-size: 12px;
+    color: var(--secondary-color);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 230px;
+}
+
+#messages-list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #f5f5f5;
+}
+
+.message-bubble {
+    max-width: 75%;
+    margin-bottom: 5px;
+    padding: 10px 12px;
+    border-radius: 20px;
+    position: relative;
+    word-wrap: break-word;
+    transition: all 0.2s ease;
+}
+
+.message-incoming {
+    align-self: flex-start;
+    background-color: #e9e9eb; /* Bulle blanche/grise pour les messages reçus */
+    color: #000;
+    border-bottom-left-radius: 5px;
+    margin-right: auto;
+}
+
+.message-outgoing {
+    align-self: flex-end;
+    background-color: #007aff; /* Bulle bleue pour les messages envoyés */
+    color: white;
+    border-bottom-right-radius: 5px;
+    margin-left: auto;
+}
+
+.message-content {
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.message-time {
+    font-size: 10px;
+    margin-top: 4px;
+    opacity: 0.7;
+    text-align: right;
+}
+
+.message-date-header {
+    align-self: center;
+    padding: 5px 10px;
+    margin: 15px 0 10px 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    font-size: 11px;
+    color: var(--secondary-color);
+}
+
+.message-input {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid var(--border-color);
+    background-color: var(--background-color);
+}
+
+.message-input input {
+    flex: 1;
+    border: none;
+    background-color: var(--item-hover-color);
+    padding: 8px 12px;
+    border-radius: 20px;
+    margin-right: 10px;
+    outline: none;
+    color: var(--text-color);
+}
+
+.message-input button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Animation pour les nouveaux messages */
+@keyframes newMessagePop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.message-bubble.new {
+    animation: newMessagePop 0.3s ease-out;
+}
+
+
+/* Dialer */
+#dialer-display {
+    padding: 20px;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+#dialed-number {
+    width: 100%;
+    border: none;
+    background: none;
+    text-align: center;
+    font-size: 30px;
+    color: var(--text-color);
+}
+
+#dialer-pad {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.dialer-key {
+    height: 60px;
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    font-size: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+.dialer-key span {
+    font-size: 10px;
+    color: var(--secondary-color);
+}
+
+#call-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding-bottom: 20px;
+}
+
+.call-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0 15px;
+}
+
+#start-call-btn {
+    background-color: var(--success-color);
+    color: white;
+}
+
+#end-call-btn {
+    background-color: var(--danger-color);
+    color: white;
+}
+
+#answer-call-btn {
+    background-color: var(--success-color);
+    color: white;
+}
+
+#delete-digit-btn {
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+/* Écran d'appel */
+.calling-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+#caller-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#caller-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 40px;
+    color: white;
+}
+
+#caller-name {
+    font-size: 28px;
+    margin-bottom: 5px;
+}
+
+#caller-number {
+    font-size: 16px;
+    color: var(--secondary-color);
+}
+
+#call-duration {
+    font-size: 18px;
+    margin: 30px 0;
+}
+
+#calling-controls {
+    display: flex;
+    justify-content: center;
+}
+
+.call-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin: 0 15px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Historique des appels */
+.call-item {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.call-item:hover {
+    background-color: var(--item-hover-color);
+}
+
+.call-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 12px;
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.call-info {
+    flex: 1;
+}
+
+.call-name {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.call-details {
+    font-size: 12px;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.call-outgoing {
+    color: var(--call-outgoing-color) !important;
+}
+
+.call-incoming {
+    color: var(--call-incoming-color) !important;
+}
+
+.call-missed, .call-no-answer {
+    color: var(--call-missed-color) !important;
+}
+
+.call-rejected {
+    color: var(--call-rejected-color) !important;
+}
+
+/* Animation pour la sélection */
+@keyframes selectPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.98); }
+    100% { transform: scale(1); }
+}
+
+
+/* Style pour le bouton de suppression */
+.delete-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 10px;
+}
+
+.delete-btn:hover {
+    color: #bd2130;
+}
+
+.call-btn-small {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--success-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Twitter */
+.tweet-item {
+    border-bottom: 1px solid var(--border-color);
+    padding: 15px;
+}
+
+.tweet-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tweet-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.tweet-user-info {
+    flex: 1;
+}
+
+.tweet-author {
+    font-weight: 600;
+}
+
+.tweet-time {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.tweet-content {
+    margin-bottom: 10px;
+}
+
+.tweet-image {
+    width: 100%;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.tweet-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.tweet-action {
+    display: flex;
+    align-items: center;
+    color: var(--secondary-color);
+    font-size: 14px;
+}
+
+.tweet-action i {
+    margin-right: 5px;
+}
+
+#tweet-char-count {
+    text-align: right;
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+/* Twitter Comments */
+.tweet-comments {
+    margin-top: 10px;
+    display: none;
+}
+
+.tweet-comments.open {
+    display: block;
+}
+
+.tweet-comment-item {
+    border-bottom: 1px solid var(--border-color);
+    padding: 10px;
+}
+
+.tweet-comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.tweet-comment-author {
+    font-weight: 600;
+}
+
+.tweet-comment-time {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.tweet-comment-content {
+    font-size: 14px;
+}
+
+.tweet-comment-form {
+    display: flex;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.tweet-comment-input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.tweet-comment-submit {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+
+/* Annonces */
+.ad-item {
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    margin-bottom: 15px;
+    overflow: hidden;
+}
+
+.ad-header {
+    padding: 10px;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ad-title {
+    font-weight: 600;
+}
+
+.ad-price {
+    font-weight: 600;
+}
+
+.ad-content {
+    padding: 10px;
+}
+
+.ad-image {
+    width: 100%;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.ad-description {
+    margin-bottom: 10px;
+}
+
+.ad-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+.ad-author {
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+.ad-contact {
+    display: flex;
+    gap: 10px;
+}
+
+.ad-contact button {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+/* Formulaires */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.form-group input, .form-group textarea, .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 5px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.form-group textarea {
+    resize: none;
+    height: 100px;
+}
+
+/* Boutons */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-secondary {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Banque */
+#bank-balance {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#balance-amount {
+    font-size: 28px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+#bank-transactions h3 {
+    margin-bottom: 10px;
+}
+
+.transaction-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.transaction-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.transaction-name {
+    font-weight: 500;
+}
+
+.transaction-date {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.transaction-amount {
+    font-weight: 600;
+}
+
+.transaction-amount.positive {
+    color: var(--success-color);
+}
+
+.transaction-amount.negative {
+    color: var(--danger-color);
+}
+
+/* Paramètres */
+.settings-group {
+    margin-bottom: 20px;
+}
+
+.settings-group h3 {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+}
+
+/* Switches pour les toggles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+
+input:checked + .slider {
+    background-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+    transform: translateX(16px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Ajoutez cette transition pour plus de fluidité */
+.slider, .slider:before {
+    transition: all 0.3s cubic-bezier(.45,.05,.55,.95);
+}
+
+
+/* Galerie */
+#gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.gallery-item {
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.gallery-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.2s;
+}
+
+.gallery-item:hover img {
+    transform: scale(1.05);
+}
+
+#photo-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+#full-photo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+#photo-options {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--background-color);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+/* YouTube */
+.youtube-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.youtube-section {
+    margin-bottom: 20px;
+}
+
+.youtube-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.youtube-video-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.youtube-video-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 8px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.youtube-video-item:hover {
+    background-color: var(--item-hover-color);
+}
+
+.youtube-thumbnail {
+    width: 120px;
+    height: 68px;
+    margin-right: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.youtube-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.youtube-video-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.youtube-video-title {
+    font-weight: 500;
+    margin-bottom: 5px;
+    font-size: 14px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.youtube-video-channel {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.youtube-search-bar {
+    padding: 10px;
+    margin-bottom: 15px;
+}
+
+.youtube-search-bar input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    padding: 8px 10px;
+    border-radius: 20px;
+    background-color: var(--item-hover-color);
+    color: var(--text-color);
+}
+
+.youtube-search-bar button {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.youtube-video-container {
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 Aspect Ratio */
+    position: relative;
+    margin-bottom: 15px;
+    background-color: #000;
+}
+
+.youtube-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.youtube-video-details {
+    padding: 0 10px;
+}
+
+.youtube-video-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+.youtube-video-stats {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+    gap: 5px;
+}
+
+.youtube-video-metadata {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.youtube-like-btn {
+    background: none;
+    border: none;
+    color: var(--secondary-color);
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.youtube-like-btn.liked {
+    color: var(--primary-color);
+}
+
+.youtube-like-btn.animated {
+    transform: scale(1.2);
+}
+
+.youtube-video-description {
+    font-size: 14px;
+    line-height: 1.4;
+    margin-top: 15px;
+    color: var(--text-color);
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.btn-text:hover {
+    color: var(--primary-color);
+    opacity: 0.8;
+}
+
+/* Thème sombre spécifique pour YouTube */
+[data-theme="dark"] .youtube-video-container {
+    background-color: #121212;
+}
+
+[data-theme="dark"] .youtube-like-btn.liked {
+    color: #ff4646;
+}
+
+
+/* Sélecteurs de fond d'écran, sonnerie, etc. */
+#wallpapers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 10px;
+    padding: 10px;
+}
+
+.wallpaper-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.wallpaper-item:hover:not(.selected) {
+    transform: scale(0.98);
+}
+
+.play-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2; /* Assurez-vous que le bouton est au-dessus de l'indicateur */
+}
+
+.play-btn:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Prévisualisations de photos */
+#tweet-photo-preview, #ad-photo-preview {
+    position: relative;
+    margin-top: 10px;
+}
+
+#tweet-photo, #ad-photo {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+#tweet-remove-photo, #ad-remove-photo {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Animation du téléphone */
+@keyframes phone-slide-in {
+    0% { transform: translateY(100%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+#phone-container.visible {
+    animation: phone-slide-in 0.3s ease-out forwards;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+/* Animations pour les interactions */
+.app-icon:active, 
+.list-item:active,
+.dialer-key:active,
+.call-btn:active,
+.btn-primary:active,
+.btn-secondary:active,
+.btn-danger:active {
+    transform: scale(0.95);
+}
+
+/* Balises pour sélectionner plusieurs messages ou appels */
+.selection-mode .app-header {
+    background-color: var(--secondary-color);
+}
+
+.selection-mode-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.selection-mode-header .selection-count {
+    font-size: 14px;
+}
+
+.selection-mode-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.selection-mode-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.selection-mode-btn:hover {
+    opacity: 0.8;
+}
+
+/* Menu contextuel pour les messages et appels */
+.context-menu {
+    position: absolute;
+    background-color: var(--background-color);
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    min-width: 150px;
+    padding: 5px 0;
+}
+
+.context-menu.hidden {
+    display: none;
+}
+
+.context-menu-item {
+    padding: 8px 15px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.context-menu-item i {
+    margin-right: 8px;
+    width: 20px;
+    text-align: center;
+}
+
+.context-menu-item:hover {
+    background-color: var(--item-hover-color);
+}
+
+.context-menu-divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 5px 0;
+}
+
+.context-menu-item.delete-item {
+    color: var(--danger-color);
+}
+
+/* Style spécifique pour le thème sombre */
+[data-theme="dark"] .context-menu {
+    background-color: #1e1e1e;
+    border: 1px solid #333;
+}
+
+[data-theme="dark"] .context-menu-item:hover {
+    background-color: #2c2c2c;
+}
+
+/* Cacher les boutons de suppression fixes puisqu'on utilise le clic droit */
+.conversation-delete-btn,
+.message-delete-btn,
+.call-delete-btn {
+    display: none;
+}
+
+/* Confirmation de suppression */
+.delete-confirmation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.delete-confirmation-content {
+    background-color: var(--background-color);
+    width: 80%;
+    max-width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.delete-confirmation-header {
+    padding: 15px;
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: 500;
+}
+
+.delete-confirmation-message {
+    padding: 20px 15px;
+    color: var(--text-color);
+}
+
+.delete-confirmation-actions {
+    display: flex;
+    border-top: 1px solid var(--border-color);
+}
+
+.delete-confirmation-btn {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    background: none;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.delete-confirmation-btn.cancel {
+    color: var(--secondary-color);
+    border-right: 1px solid var(--border-color);
+}
+
+.delete-confirmation-btn.confirm {
+    color: var(--danger-color);
+}
+
+/* Style pour le mode édition */
+.edit-mode .app-header {
+    background-color: var(--warning-color);
+}
+
+.edit-mode .message-bubble {
+    transform: translateX(-15px);
+}
+
+.edit-mode .call-item {
+    transform: translateX(-15px);
+}
+
+.edit-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--secondary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    transition: all 0.2s ease;
+}
+
+.edit-checkbox.checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.edit-checkbox.checked::after {
+    content: "✓";
+    color: white;
+    font-size: 12px;
+}
+
+/* Indicateurs de chargement */
+.loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.loading-spinner {
+    width: 30px;
+    height: 30px;
+    border: 3px solid var(--border-color);
+    border-top: 3px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Améliorations pour l'affichage des dates */
+.message-date {
+    font-size: 12px;
+    color: var(--secondary-color);
+    text-align: right;
+    margin-top: 2px;
+}
+
+/* Style pour les messages système */
+.system-message {
+    align-self: center;
+    background-color: rgba(0, 0, 0, 0.1);
+    color: var(--secondary-color);
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 12px;
+    margin: 10px 0;
+}
+
+/* Effet visuel pour les messages envoyés */
+@keyframes messageSent {
+    0% { opacity: 0.5; transform: translateY(10px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+.message-sent {
+    animation: messageSent 0.3s ease-out;
+}
+
+/* États des appels */
+.call-status {
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.call-status.ringing {
+    color: var(--warning-color);
+}
+
+.call-status.active {
+    color: var(--success-color);
+}
+
+.call-status.ended {
+    color: var(--secondary-color);
+}
+
+/* Améliorations pour l'accessibilité */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* États focus pour une meilleure accessibilité */
+button:focus, 
+input:focus, 
+textarea:focus, 
+select:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Pour les éléments où l'outline n'est pas souhaitable */
+.app-icon:focus,
+.dialer-key:focus,
+.call-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+/* Écran de verrouillage spécifiquement */
+#lock-screen {
+    background-size: cover !important;
+    background-position: center !important;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px 0;
+    z-index: 15; /* Assurer qu'il est au-dessus des autres écrans */
+}
+
+#lock-screen.active {
+    display: flex;
+}
+
+
+#lock-time {
+    font-size: 60px;
+    font-weight: 300;
+    color: white;
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    margin-top: 50px;
+}
+
+#lock-date {
+    font-size: 16px;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    margin-top: 20px;
+}
+
+#fingerprint-container {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+#fingerprint-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: white;
+    font-size: 40px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+#fingerprint-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(1.05);
+}
+
+#fingerprint-btn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.4);
+}
+
+#fingerprint-btn i {
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+#fingerprint-text {
+    color: white;
+    font-size: 14px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+
+/* Styles pour les nouveaux boutons de navigation */
+#home-btn, #back-btn, #lock-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid white;
+    background: none;
+    color: white;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+
+/* Animation de déverrouillage */
+@keyframes unlock-animation {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0; transform: scale(1.1); }
+    100% { opacity: 0; transform: scale(0); }
+}
+
+.unlocking {
+    animation: unlock-animation 0.5s ease-in-out forwards;
+}
+
+.youtube-stop-btn {
+    background: var(--danger-color);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+}
+
+.youtube-stop-btn:hover {
+    background: #c82333;
+}
+
+.youtube-stop-btn i {
+    font-size: 12px;
+}
+
+.now-playing-badge {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 0, 0, 0.8);
+    color: white;
+    border-radius: 15px;
+    padding: 5px 10px;
+    margin-left: 10px;
+    font-size: 12px;
+}
+
+.badge-content {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.badge-stop-btn {
+    background: none;
+    border: none;
+    color: white;
+    padding: 2px 5px;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.badge-stop-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.app-indicator {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--danger-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 6px;
+    color: white;
+}
+
+/* Styles pour l'application Garage - Ajouter à la fin du fichier style.css */
+.vehicle-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+}
+
+.vehicle-item:hover {
+    background-color: var(--item-hover-color);
+}
+
+.vehicle-icon {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+}
+
+.vehicle-info {
+    flex: 1;
+}
+
+.vehicle-plate {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.vehicle-type {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.vehicle-status {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: white;
+    text-align: center;
+}
+
+.status-garage {
+    background-color: var(--success-color);
+}
+
+.status-pound {
+    background-color: var(--warning-color);
+}
+
+.status-outside {
+    background-color: var(--info-color);
+}
+
+.vehicle-image {
+    width: 100%;
+    height: 150px;
+    background-color: rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    border-radius: 8px;
+}
+
+.vehicle-image i {
+    font-size: 50px;
+    color: var(--secondary-color);
+}
+
+#vehicle-info {
+    margin-bottom: 20px;
+}
+
+#vehicle-info div {
+    margin-bottom: 10px;
+}
+
+#vehicle-info .info-label {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+#vehicle-info .info-value {
+    padding: 8px;
+    background-color: var(--item-hover-color);
+    border-radius: 5px;
+}
+
+#vehicle-actions {
+    display: flex;
+    gap: 10px;
+}
+
+
+/* Alarmes */
+#alarms-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 0;
+}
+
+.alarm-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: var(--item-hover-color);
+    border-radius: 8px;
+    border-left: 4px solid var(--primary-color);
+}
+
+.alarm-info {
+    flex: 1;
+}
+
+.alarm-time {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.alarm-label {
+    font-size: 14px;
+    color: var(--secondary-color);
+}
+
+.alarm-days {
+    font-size: 12px;
+    color: var(--secondary-color);
+    margin-top: 4px;
+}
+
+.alarm-toggle {
+    margin-left: 10px;
+}
+
+.alarm-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.alarm-edit, .alarm-delete {
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: var(--text-color);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alarm-edit:hover, .alarm-delete:hover {
+    background-color: rgba(0,0,0,0.1);
+}
+
+.alarm-delete {
+    color: var(--danger-color);
+}
+
+/* Sélecteur de jours */
+.days-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.day-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.day-item span {
+    font-size: 12px;
+}
+
+.day-checkbox {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid var(--border-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.day-checkbox.selected {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
+.day-checkbox.selected::after {
+    content: "✓";
+    color: white;
+}
+
+/* Popup de notification d'alarme */
+.popup-notification {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--background-color);
+    width: 80%;
+    max-width: 300px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+}
+
+.popup-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.popup-header h2 {
+    font-size: 18px;
+    margin: 0;
+}
+
+.popup-header button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.popup-content {
+    padding: 20px;
+}
+
+.alarm-notification .alarm-info {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.alarm-notification .alarm-time {
+    font-size: 36px;
+    font-weight: 700;
+}
+
+.alarm-notification .alarm-label {
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.alarm-notification .alarm-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* Indicateurs visuels pour les éléments sélectionnés dans les paramètres */
+.wallpaper-item, .ringtone-item, .notification-item {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+}
+
+.wallpaper-item.selected, .ringtone-item.selected, .notification-item.selected {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+
+/* Conservez la position d'origine pour les fonds d'écran */
+.wallpaper-item.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 24px;
+    height: 24px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+
+#wallpapers-grid .wallpaper-item.selected {
+    transform: scale(0.95);
+    border-width: 3px;
+}
+
+
+.ringtone-item.selected, .notification-item.selected {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.transaction-recipient {
+    font-size: 12px;
+    color: var(--secondary-color);
+    font-style: italic;
+}
+
+/* Styles pour les boutons de suppression dans les conversations, messages et appels */
+.conversation-delete-btn,
+.message-delete-btn,
+.call-delete-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+}
+
+.conversation-delete-btn:hover,
+.message-delete-btn:hover,
+.call-delete-btn:hover {
+    opacity: 1;
+}
+
+.conversation-item {
+    position: relative;
+}
+
+.conversation-delete-btn {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.message-bubble {
+    position: relative;
+}
+
+.message-delete-btn {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: none;
+    font-size: 12px;
+}
+
+.message-bubble:hover .message-delete-btn {
+    display: block;
+}
+
+.call-delete-btn {
+    margin-left: 5px;
+}
+
+/* Styles pour le Centre d'appel */
+.service-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.service-item:hover {
+    background-color: var(--item-hover-color);
+}
+
+.service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    margin-right: 15px;
+    overflow: hidden;
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.service-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.service-info {
+    flex: 1;
+}
+
+.service-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--text-color);
+}
+
+.service-number {
+    font-size: 12px;
+    color: var(--secondary-color);
+}
+
+.service-description {
+    font-size: 12px;
+    color: var(--secondary-color);
+    margin-top: 4px;
+}
+
+.service-call-btn {
+    width: 36px;
+    height: 36px;
+    background-color: var(--success-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.service-call-btn:hover {
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+/* Styles pour l'application Agent */
+#agent-screen .app-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+#agent-status-info {
+    background-color: var(--item-hover-color);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+#agent-status-info h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    text-align: center;
+}
+
+.agent-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.agent-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.agent-info-row:last-child {
+    border-bottom: none;
+}
+
+#agent-action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.service-phone-actions {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.service-phone-actions button {
+    width: 80%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.notification-section {
+    background-color: var(--item-hover-color);
+    border-radius: 8px;
+    padding: 15px;
+}
+
+.notification-section h3 {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.status-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.status-buttons button {
+    flex: 1;
+    padding: 10px;
+    font-size: 12px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.status-buttons button i {
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.custom-notification {
+    display: flex;
+    gap: 10px;
+}
+
+.custom-notification input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.custom-notification button {
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Système de notification unifié */
+.phone-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: rgba(25, 25, 25, 0.9);
+    color: white;
+    border-radius: 8px;
+    padding: 12px;
+    width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    transition: all 0.3s ease;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    border-left: 3px solid var(--primary-color);
+}
+
+.phone-notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+
+.phone-notification.info { border-left-color: var(--primary-color); }
+.phone-notification.success { border-left-color: var(--success-color); }
+.phone-notification.error { border-left-color: var(--danger-color); }
+.phone-notification.warning { border-left-color: var(--warning-color); }
+
+.notification-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.notification-icon i {
+    font-size: 24px;
+}
+
+.notification-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.notification-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.notification-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+.notification-message {
+    font-size: 14px;
+    opacity: 0.9;
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+.notification-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    background: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.notification-close:hover {
+    color: white;
+}
+
+.notification-stack {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 9999;
+    pointer-events: none;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+
+.notification-stack .phone-notification {
+    position: relative;
+    pointer-events: auto;
+    margin-bottom: 10px;
+    transform: none;
+    opacity: 1;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
